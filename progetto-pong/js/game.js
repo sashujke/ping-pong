@@ -1,6 +1,6 @@
 /**
 * Implementazione del videogioco Pong.
-* @author Siarou Aliaksandr
+* @author Scorza Michael
 * @version 1.0
 */
 
@@ -35,47 +35,40 @@ class Background extends Sprite {
 
   }
 }
-
 //---------------------------------------------------------
-/**
-* Classe per la gesitione di una palla
+/*
+* classe per la gestione di una palla
 */
 class Ball extends Sprite {
-	 /**
-  * Crea un nuovo oggetto Ball.
+  /**
+  * Crea un nuovo oggetto Background.
   * @param {string} path - percorso della risorsa
-  * @param {number} width - larghezza dello sfondo
-  * @param {number} height - Altezza dello sfondo
+  * @param {number} width - larghezza dello palla
+  * @param {number} height - Altezza dello palla
   */
   constructor(path, width, height) {
     super(path, width, height);
-
   }
-/**
-* Esegue un rimbalzo orizzontale
-*/
-	bouncex() {
-		this.speed.x = -this.speed.x;
-	}
-	
-	bouncey() {
-		this.speed.y = -this.speed.y;
-	}
-/**
-* Aggiorna lo stato della palla
-*/
-	update() {
-		this.position.x += this.speed.x;
-		this.position.y += this.speed.y;
-	}
-}
 
-//----------------------------------------------------------------
-/**
-* Classe per la gestione di un giocatore
-*/
+  /* esegue un rimbalzo orizzontale della palla
+  */
+  bouncex(){
+    this.speed.x = -this.speed.x; // inverte la velocità orizzontale
+  }
+  bouncey(){
+    this.speed.y = -this.speed.y;
+  }
+
+/*aggiorna lo stato della pallina*/ 
+  update(){
+    this.position.x += this.speed.x;
+    this.position.y += this.speed.y;
+  }
+}
+//---------------------------------------------------------
+
 class Player extends Sprite {
-   /**
+  /**
   * Crea un nuovo oggetto Background.
   * @param {string} path - percorso della risorsa
   * @param {number} width - larghezza dello sfondo
@@ -83,119 +76,122 @@ class Player extends Sprite {
   */
   constructor(path, width, height) {
     super(path, width, height);
-		this.score = 0;
-		this.up = new Key("w");
-		this.down = new Key("s");
+    this.score = 0;
+    this.up = new Key("w");
+    this.down = new Key("s");
   }
 
-/**
-* Aggiorna lo stato di un giocatore
-*/
-update() {
-	if (this.up.pressed) {
-		this.position.y -= this.speed.y; 
-	}
-	else if (this.down.pressed) {
-		this.position.y += this.speed.y; 
-	}
-}
-/**
-* Gestivce evento relativo al rilascio dei tasti up e down
-*/
-keyUpHandler(e) {
-	this.up.keyUpHandler(e);
-	this.down.keyUpHandler(e);
+  /*aggiorna stato giocatore*/ 
+  update(){
+    if(this.up.pressed){
+      this.position.y -= this.speed.y;
+    }
+    else if(this.down.pressed){
+      this.position.y += this.speed.y;
+    }
+  }
+
+  /* gestisce l'evento relativo al rilascio dei tasti UP & DOWN
+  * @param {Object} e - evento associato alla pressione dei tasti
+  * 
+  */
+  keyUpHandler(e){
+   this.up.keyUpHandler(e);
+   this.down.keyUpHandler(e);
+  }
+
+  /* gestisce l'evento relativo alla pressione dei tasti UP & DOWN
+  * @param {Object} e - evento associato alla pressione dei tasti
+  */
+  keyDownHandler(e){
+    this.up.keyDownHandler(e);
+    this.down.keyDownHandler(e);
+  }
 }
 
-/**
-* Gestivce evento relativo alla pressione dei tasti up e down
-*/
-keyDownHandler(e) {
-	this.up.keyDownHandler(e);
-	this.down.keyDownHandler(e);
-}
-}
+
 //---------------------------------------------------------
 class Game {
+
+  /*crea un nuovo oggetto Game*/
   constructor() {
     this.background = new Background(BACKGROUND, STAGE_WIDTH, STAGE_HEIGHT);
-	this.ball = new Ball(BALL, 16, 16);
-	this.player1 = new Player (PLAYER1, 15, 100);
-	this.initialize();
-  }
-/**
-* Inizializza gli oggetti
-*/
-  initialize() {
-	this.ball.position.set(50, ((STAGE_HEIGHT - this.ball.height) / 2));
-	this.ball.speed.set(10, 10);
-	this.player1.position.set (3,((STAGE_HEIGHT - this.player1.height) / 2) )
-	this.player1.speed.set (0, 10);
-	this.player1.score = 0;
+    this.ball = new Ball(BALL, 16, 16)
+    this.player1 = new Player(PLAYER1, 15, 100);
+    this.initialize();
   }
 
-keyUpHandler(e) {
-	this.player1.keyUpHandler(e);
-}
-keyDownHandler(e) {
-	this.player1.keyDownHandler(e);
-}
-  /**
-* Aggiorna lo stato degli oggetti
-*/
+  keyUpHandler(e){
+    this.player1.keyUpHandler(e);
+  }
+
+  keyDownHandler(e){
+    this.player1.keyDownHandler(e);
+  }
+
+  /*inizializza gli oggetti*/
+  initialize(){
+    this.ball.position.set(50, (STAGE_HEIGHT - this.ball.height) / 2);
+    this.ball.speed.set(10, 10);
+    this.player1.position.set(3, (STAGE_HEIGHT - this.player1.height) / 2);
+    this.player1.speed.set(0, 10);
+    this.player1.score = 0;
+  }
+
+  /*aggiorna lo stato di tutti gli oggetti*/
   update() {
-		this.ball.update();
+    this.ball.update();
+    this.player1.update();
   }
 
-  /**
-* Disegna gli oggetti
-*/
+  /*disegna tutti gli oggetti*/
   draw() {
     this.background.draw();
-	this.ball.draw();
-	this.player1.draw();
+    this.ball.draw();
+    this.player1.draw();
   }
 }
 
-init(STAGE_ID,STAGE_X, STAGE_Y, STAGE_WIDTH, STAGE_HEIGHT);
+//---------------------------------------------------------
+
+init(STAGE_ID, STAGE_X, STAGE_Y, STAGE_WIDTH, STAGE_HEIGHT);
 let game = new Game();
 
-//--------------------------------------------------------
-
 /*
-* Gestise l aggiornamento del gioco a ogni frame
-* @param {number} time - tempo
+* gestisce l'aggiornamento del gioco ad ogni frame.
+* @param {number} time - tempo trascorso dall'ultimo frame
 */
-function run(time) {
-	game.update();
-	game.draw();
-	raf = requestAnimationFrame(run);
-	}
+function run(time){
+  game.update();
+  game.draw(); 
+  raf = requestAnimationFrame(run);
+}
+
 /*
-* Gestise l evento onclick del button new game
+* gestisce l'evevnto del pulsante NEW GAME
 */
-function btnNewGameClick() {
- 	game.initialize();
-	cancelAnimationFrame(raf);
- 	raf = requestAnimationFrame(run);
-	
+function btnNewGameClick(){
+  game.initialize(); // inizializza il gioco
+  cancelAnimationFrame(raf); // resetta il gioco
+  raf = requestAnimationFrame(run); // avvia il gioco
 }
 
 /*
-* Gestice l evento relativo al caricamento della pagina web
-* @param {Object} e - Parametro relativo all evento
-*/ 
-function loadHandler(e) {
-	game.draw();
+* gestisce l'evevnto relativo al caricamneto della pagina web
+* @param {number} time - parametro relativo all'evento
+*/
+function loadHandLer(e){
+  game.draw(); 
 }
 
-function keyUpHandler(e) {
-	game.keyUpHandler(e);
-}
-function keyDownHandler(e) {
-	game.keyDownHandler(e);
+function keyUpHandler(e){
+  game.keyUpHandler(e);
 }
 
-window.addEventListener("load", loadHandler);
+function keyDownHandler(e){
+  game.keyDownHandler(e);
+}
+
+window.addEventListener("load", loadHandLer);
 window.addEventListener("keyup", keyUpHandler);
 window.addEventListener("keydown", keyDownHandler);
